@@ -12,4 +12,16 @@ fn main() {
     let stdin = io::stdin();
     let mut input = String::new();
     stdin.read_line(&mut input).unwrap();
+
+    match input.trim() {
+        "cd" => {
+            println!("cd: missing argument");
+        }
+        "echo" => {
+            println!("echo: missing argument");
+        }
+        _ => {
+            println!("{}: command not found", input.trim());
+        }
+    }
 }

@@ -21,6 +21,9 @@ fn main() {
             "echo" => {
                 println!("echo: missing argument");
             }
+            "exit 0" => {
+                std::process::exit(0);
+            }
             _ => {
                 println!("{}: command not found", input.trim());
             }

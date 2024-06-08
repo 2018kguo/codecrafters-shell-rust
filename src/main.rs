@@ -2,6 +2,7 @@ use std::env;
 use std::fs;
 #[allow(unused_imports)]
 use std::io::{self, Write};
+use std::process::Command;
 
 fn main() {
     // You can use print statements as follows for debugging, they'll be visible when running tests.
@@ -31,19 +32,36 @@ fn main() {
             ["type", arg] => {
                 if ["cd", "echo", "exit", "type"].contains(&arg) {
                     println!("{} is a shell builtin", arg);
-                } else if let Some(env_path) = env::var("PATH")
-                    .unwrap()
-                    .split(":")
-                    .find(|path| fs::metadata(format!("{}/{}", path, arg)).is_ok())
-                {
-                    println!("{} is {}/{}", arg, env_path, arg);
+                } else if let Some(env_path) = handle_finding_file_in_path(arg)                {
+                    println!("{} is {}", arg, env_path);
                 } else {
                     println!("{}: not found", arg);
                 }
             }
             _ => {
-                println!("{}: command not found", _input);
+                if let Some(env_path) = handle_finding_file_in_path(&command[0]) {
+                    let output = Command::new(env_path)
+                        .args(&command[1..])
+                        .output()
+                        .expect("failed to execute process");
+                    // There's an extra newline at the end of the output, so we need to use write_all instead of println
+                    print!("{}", String::from_utf8_lossy(&output.stdout));
+                } else {
+                    println!("{}: not found", command[0]);
+                }
             }
         }
     }
+}
+
+fn handle_finding_file_in_path(arg: &str) -> Option<String> {
+    let path = env::var("PATH").unwrap();
+    let paths = path.split(":");
+    for p in paths {
+        let file_path = format!("{}/{}", p, arg);
+        if fs::metadata(file_path.clone()).is_ok() {
+            return Some(file_path);
+        }
+    }
+    None
 }

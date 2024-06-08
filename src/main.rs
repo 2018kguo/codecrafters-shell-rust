@@ -1,7 +1,7 @@
+use std::env;
+use std::fs;
 #[allow(unused_imports)]
 use std::io::{self, Write};
-
-
 
 fn main() {
     // You can use print statements as follows for debugging, they'll be visible when running tests.
@@ -29,10 +29,16 @@ fn main() {
                 std::process::exit(0);
             }
             ["type", arg] => {
-                if !["cd", "echo", "exit", "type"].contains(&arg) {
-                    println!("{}: not found", arg);
-                } else {
+                if ["cd", "echo", "exit", "type"].contains(&arg) {
                     println!("{} is a shell builtin", arg);
+                } else if let Some(full_path) = env::var("PATH")
+                    .unwrap()
+                    .split(":")
+                    .find(|path| fs::metadata(format!("{}/{}", path, arg)).is_ok())
+                {
+                    println!("type is {}", full_path);
+                } else {
+                    println!("{}: not found", arg);
                 }
             }
             _ => {

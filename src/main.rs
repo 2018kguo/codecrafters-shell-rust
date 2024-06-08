@@ -39,6 +39,9 @@ fn main() {
                 }
             }
             _ => {
+                if command.is_empty() {
+                    continue;
+                }
                 if let Some(env_path) = handle_finding_file_in_path(&command[0]) {
                     let output = Command::new(env_path)
                         .args(&command[1..])
@@ -46,6 +49,7 @@ fn main() {
                         .expect("failed to execute process");
                     // There's an extra newline at the end of the output, so we need to use write_all instead of println
                     print!("{}", String::from_utf8_lossy(&output.stdout));
+                    print!("{}", String::from_utf8_lossy(&output.stderr));
                 } else {
                     println!("{}: not found", command[0]);
                 }

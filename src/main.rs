@@ -13,19 +13,21 @@ fn main() {
         let stdin = io::stdin();
         let mut input = String::new();
         stdin.read_line(&mut input).unwrap();
-        
-        match input.trim() {
-            "cd" => {
+        let _input = input.trim();
+        let command = _input.split_whitespace().collect::<Vec<&str>>();
+        match *command.as_slice() {
+            ["cd", _path] => {
                 println!("cd: missing argument");
             }
-            "echo" => {
-                println!("echo: missing argument");
+            ["echo", ..] => {
+                let echo_response = _input.split_at(5).1;
+                println!("{}", echo_response);
             }
-            "exit 0" => {
+            ["exit", "0"] => {
                 std::process::exit(0);
             }
             _ => {
-                println!("{}: command not found", input.trim());
+                println!("{}: command not found", _input);
             }
         }
     }

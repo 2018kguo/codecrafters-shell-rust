@@ -1,6 +1,8 @@
 #[allow(unused_imports)]
 use std::io::{self, Write};
 
+
+
 fn main() {
     // You can use print statements as follows for debugging, they'll be visible when running tests.
     //println!("Logs from your program will appear here!");
@@ -25,6 +27,13 @@ fn main() {
             }
             ["exit", "0"] => {
                 std::process::exit(0);
+            }
+            ["type", arg] => {
+                if !["cd", "echo", "exit", "type"].contains(&arg) {
+                    println!("{}: not found", arg);
+                } else {
+                    println!("{} is a shell builtin", arg);
+                }
             }
             _ => {
                 println!("{}: command not found", _input);

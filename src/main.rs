@@ -5,11 +5,9 @@ use std::io::{self, Write};
 use std::process::Command;
 
 fn main() {
-    // You can use print statements as follows for debugging, they'll be visible when running tests.
-    //println!("Logs from your program will appear here!");
-
     loop {
         print!("$ ");
+        // Terminals are line-buffered by default, so we need to flush the buffer to display the prompt
         io::stdout().flush().unwrap();
 
         // Wait for user input

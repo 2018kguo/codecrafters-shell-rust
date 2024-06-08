@@ -27,8 +27,8 @@ fn main() {
             ["cd", path] => {
                 // This shell program runs as a separate process and std::process:Command also spawns a separate process.
                 // Changing the current directory in the child process does not affect the parent process.
-                if let Err(err) = env::set_current_dir(path) {
-                    println!("cd: {}: {}", path, err);
+                if let Err(_) = env::set_current_dir(path) {
+                    println!("cd: {}: No such file or directory", path);
                 }
             }
             ["echo", ..] => {

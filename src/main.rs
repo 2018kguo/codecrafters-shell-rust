@@ -19,8 +19,17 @@ fn main() {
         let _input = input.trim();
         let command = _input.split_whitespace().collect::<Vec<&str>>();
         match *command.as_slice() {
-            ["cd", _path] => {
-                println!("cd: missing argument");
+            ["cd"] => {
+                if let Err(err) = env::set_current_dir(env::var("HOME").unwrap()) {
+                    println!("cd: {}: {}", env::var("HOME").unwrap(), err);
+                }
+            }
+            ["cd", path] => {
+                // This shell program runs as a separate process and std::process:Command also spawns a separate process.
+                // Changing the current directory in the child process does not affect the parent process.
+                if let Err(err) = env::set_current_dir(path) {
+                    println!("cd: {}: {}", path, err);
+                }
             }
             ["echo", ..] => {
                 let echo_response = _input.split_at(5).1;
@@ -32,7 +41,7 @@ fn main() {
             ["type", arg] => {
                 if ["cd", "echo", "exit", "type"].contains(&arg) {
                     println!("{} is a shell builtin", arg);
-                } else if let Some(env_path) = handle_finding_file_in_path(arg)                {
+                } else if let Some(env_path) = handle_finding_file_in_path(arg) {
                     println!("{} is {}", arg, env_path);
                 } else {
                     println!("{}: not found", arg);

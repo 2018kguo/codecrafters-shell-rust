@@ -19,7 +19,7 @@ fn main() {
         let _input = input.trim();
         let command = _input.split_whitespace().collect::<Vec<&str>>();
         match *command.as_slice() {
-            ["cd"] => {
+            ["cd"] | ["cd", "~"] => {
                 if let Err(err) = env::set_current_dir(env::var("HOME").unwrap()) {
                     println!("cd: {}: {}", env::var("HOME").unwrap(), err);
                 }

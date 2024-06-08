@@ -31,12 +31,12 @@ fn main() {
             ["type", arg] => {
                 if ["cd", "echo", "exit", "type"].contains(&arg) {
                     println!("{} is a shell builtin", arg);
-                } else if let Some(full_path) = env::var("PATH")
+                } else if let Some(env_path) = env::var("PATH")
                     .unwrap()
                     .split(":")
                     .find(|path| fs::metadata(format!("{}/{}", path, arg)).is_ok())
                 {
-                    println!("type is {}", full_path);
+                    println!("{} is {}/{}", arg, env_path, arg);
                 } else {
                     println!("{}: not found", arg);
                 }

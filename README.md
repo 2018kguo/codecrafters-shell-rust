@@ -1,4 +1,4 @@
-[![progress-banner](https://backend.codecrafters.io/progress/shell/7d285082-a649-4bb0-b662-e2f4864426f9)](https://app.codecrafters.io/users/codecrafters-bot?r=2qF)
+https://app.codecrafters.io/users/2018kguo
 
 This is a starting point for Rust solutions to the
 ["Build Your Own Shell" Challenge](https://app.codecrafters.io/courses/shell/overview).
